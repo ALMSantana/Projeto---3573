@@ -27,5 +27,33 @@ assistente = cliente.beta.assistants.create(
     model = modelo
 )
 
-print(assistente.id)
+thread = cliente.beta.threads.create(
+    messages=[
+        {
+            "role": "user",
+            "content": "Liste os produtos"
+        }
+    ]
+)
 
+cliente.beta.threads.messages.create(
+    thread_id=thread.id, 
+    role = "user",
+    content =  " da categoria moda sustentável"
+)
+
+run = cliente.beta.threads.runs.create(
+    thread_id=thread.id,
+    assistant_id=assistente.id
+)
+
+while run.status !="completed":
+    run = cliente.beta.threads.runs.retrieve(
+        thread_id=thread.id,
+        run_id=run.id
+    )
+
+historico = cliente.beta.threads.messages.list(thread_id=thread.id).data
+
+for mensagem in reversed(historico):
+    print(f"role: {mensagem.role}\nConteúdo: {mensagem.content[0].text.value}")
