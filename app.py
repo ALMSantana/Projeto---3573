@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from time import sleep
 from helpers import *
+from selecionar_persona import *
 
 load_dotenv()
 
@@ -18,16 +19,20 @@ contexto = carrega("dados/ecomart.txt")
 def bot(prompt):
     maximo_tentativas = 1
     repeticao = 0
-
+    personalidade = personas[selecionar_persona(prompt)]
     while True:
         try:
             prompt_do_sistema = f"""
             Você é um chatbot de atendimento a clientes de um e-commerce. 
             Você não deve responder perguntas que não sejam dados do ecommerce informado!
             Você deve gerar respostas utilizando o contexto abaixo.
+            Você deve adotar a persona abaixo.
             
             # Contexto
             {contexto}
+
+            # Persona
+            {personalidade}
             """
             response = cliente.chat.completions.create(
                 messages=[
