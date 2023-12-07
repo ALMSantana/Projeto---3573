@@ -27,10 +27,26 @@ def bot(prompt):
 
     while True:
         try:
+            personalidade = personas[selecionar_persona(prompt)]
+
             cliente.beta.threads.messages.create(
                 thread_id=thread_id, 
                 role = "user",
-                content =  prompt
+                content =  f"""
+                Assuma, de agora em diante, a personalidade abaixo. 
+                Ignore as personalidades anteriores.
+
+                # Persona
+                {personalidade}
+                """,
+                file_ids=file_ids
+            )
+
+            cliente.beta.threads.messages.create(
+                thread_id=thread_id, 
+                role = "user",
+                content =  prompt,
+                file_ids=file_ids
             )
 
             run = cliente.beta.threads.runs.create(
