@@ -45,6 +45,10 @@ async function enviarMensagem() {
     let mensagem = input.value;
     input.value = "";
 
+    if (miniaturaImagem) {
+        miniaturaImagem.remove(); 
+    }
+
     let novaBolha = criaBolhaUsuario();
     novaBolha.innerHTML = mensagem;
     chat.appendChild(novaBolha);
