@@ -62,7 +62,6 @@ def bot(prompt):
                     thread_id=thread_id,
                     run_id=run.id
             )
-                print(f"Status: {run.status}")
                 
                 if run.status == STATUS_REQUIRES_ACTION:
                     tools_acionadas =       run.required_action.submit_tool_outputs.tool_calls
@@ -97,6 +96,14 @@ def bot(prompt):
                 sleep(1)
             
 
+
+@app.route('/upload_imagem', methods=['POST'])
+def upload_imagem():
+    if 'imagem' in request.files:
+        imagem_enviada = request.files['imagem']
+        print(imagem_enviada)
+        return 'Imagem recebida com sucesso!', 200
+    return 'Nenhum arquivo foi enviado', 400
 
 @app.route("/chat", methods=["POST"])
 def chat():
